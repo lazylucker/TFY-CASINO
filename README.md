@@ -1,2 +1,0 @@
-# TFY-CASINO
-Tg bot TFY CASINO
