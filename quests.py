@@ -45,3 +45,17 @@ characters = {
         {"name": "Безмолвие", "desc": "Игнорировать бота 4 часа"}
     ]
 }
+def complete_quest(user, quest_name):
+    quest_history = QuestHistory(user_id=user.id, quest_name=quest_name)
+    session.add(quest_history)
+    session.commit()
+
+    # Увеличиваем счетчик завершенных квестов
+    user.completed_quests += 1
+    session.commit()
+
+    # Проверяем, даёт ли выполнение квеста доступ в казино
+    if user.completed_quests >= 3:
+        user.has_access_to_casino = True
+        session.commit()
+
