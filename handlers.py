@@ -34,3 +34,18 @@ async def quest(update, context):
         await update.message.reply_text(f"Твой квест: {quest_name}")
     else:
         await update.message.reply_text("Сначала выбери персонажа через /start")
+async def casino(update, context):
+    user_id = update.effective_user.id
+    user = session.query(User).filter_by(telegram_id=user_id).first()
+
+    if not user or not user.has_access_to_casino:
+        await update.message.reply_text("Казино доступно только после выполнения квестов!")
+        return
+
+    result = spin_slot()
+    win = check_win(result)
+
+    message = f"🎰 {result[0]} | {result[1]} | {result[2]} 🎰\n"
+    message += "🎉 Ты выиграл!" if win else "😢 Попробуй снова."
+
+    await update.message.reply_text(message)
