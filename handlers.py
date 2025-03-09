@@ -71,3 +71,13 @@ async def casino(update, context):
         message += "Попробуйте снова!"
 
     await update.message.reply_text(message)
+async def quest(update, context):
+    user_id = update.effective_user.id
+    user = session.query(User).filter_by(telegram_id=user_id).first()
+
+    if user:
+        quest_name = assign_quest(user)
+        complete_quest(user, quest_name)
+        await update.message.reply_text(f"Твой квест: {quest_name} выполнен!")
+    else:
+        await update.message.reply_text("Сначала выбери персонажа!")
